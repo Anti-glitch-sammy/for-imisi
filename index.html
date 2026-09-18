@@ -111,6 +111,87 @@
     margin: 0 auto;
   }
 
+  .nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
+    box-sizing: border-box;
+    background: rgba(4, 16, 29, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 900;
+  }
+
+  .nav-toggle {
+    width: 34px;
+    height: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .nav-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: #e0a45c;
+    border-radius: 2px;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 260px;
+    background: #0a2440;
+    border-right: 2px solid #e0a45c;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.4);
+    z-index: 950;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    padding: 90px 30px;
+    box-sizing: border-box;
+  }
+
+  .nav-menu.open {
+    transform: translateX(0);
+  }
+
+  .nav-menu a {
+    display: block;
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 1.8em;
+    text-decoration: none;
+    margin-bottom: 28px;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 940;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .nav-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .landing-screen {
     position: fixed;
     inset: 0;
@@ -128,6 +209,15 @@
     pointer-events: none;
   }
 
+  .landing-prefix {
+    color: #cfe8ff;
+    font-family: 'Kalam', cursive;
+    font-size: 1.4em;
+    letter-spacing: 2px;
+    opacity: 0.85;
+    margin: 0;
+  }
+
   .landing-name {
     color: #ffd9a0;
     font-family: 'Caveat', cursive;
@@ -135,7 +225,8 @@
     font-size: 5.5em;
     text-shadow: 0 0 25px rgba(255, 200, 120, 0.7);
     animation: glowPulse 3s ease-in-out infinite;
-    margin: 0;
+    margin: 4px 0 0 0;
+    line-height: 1;
   }
 
   .landing-subtext {
@@ -405,12 +496,28 @@
 <body class="locked">
 
 <div class="landing-screen" id="landingScreen">
+  <div class="landing-prefix">to my</div>
   <div class="landing-name">Imisi</div>
   <div class="landing-subtext">a little something made for you</div>
   <div class="landing-prompt" id="landingPrompt">tap to open</div>
 </div>
 
-<div class="timer-section">
+<div class="nav-bar">
+  <button class="nav-toggle" id="navToggle">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<div class="nav-overlay" id="navOverlay"></div>
+<div class="nav-menu" id="navMenu">
+  <a href="#section-timer">Every Second With You</a>
+  <a href="#section-timeline">Our Story</a>
+  <a href="#section-memories">Us, In Moments</a>
+  <a href="#section-letters">Letters to My Love</a>
+  <a href="#section-formula">The Formula of Our Love</a>
+</div>
+
+<div class="timer-section" id="section-timer">
   <div class="timer-heading">Every Second With You</div>
   <div class="timer-display">
     <div class="timer-unit"><div class="timer-number" id="tYears">0</div><div class="timer-label">Years</div></div>
@@ -421,12 +528,12 @@
   </div>
 </div>
 
-<div class="timeline-section">
+<div class="timeline-section" id="section-timeline">
   <div class="timeline-heading">Our Story</div>
   <div class="timeline" id="timelineList"></div>
 </div>
 
-<div class="carousel-section">
+<div class="carousel-section" id="section-memories">
   <div class="carousel-heading">Us, In Moments</div>
   <div class="carousel-stage" id="carouselStage"></div>
   <div class="carousel-nav">
@@ -435,12 +542,12 @@
   </div>
 </div>
 
-<div class="poems-section">
+<div class="poems-section" id="section-letters">
   <div class="poems-heading">Letters to My Love</div>
   <div class="poems-grid" id="poemsGrid"></div>
 </div>
 
-<div class="hero">
+<div class="hero" id="section-formula">
   <div class="header">The Formula of Our Love</div>
   <div class="formula">f(x) = |x|^(2/3) + sqrt(3.2 - x^2) * sin(18 * pi * x)</div>
 
@@ -455,6 +562,27 @@
 </div>
 
 <script>
+// Nav menu toggle
+const navToggle = document.getElementById('navToggle');
+const navMenu = document.getElementById('navMenu');
+const navOverlay = document.getElementById('navOverlay');
+
+function closeNav() {
+  navMenu.classList.remove('open');
+  navOverlay.classList.remove('open');
+}
+
+navToggle.addEventListener('click', () => {
+  navMenu.classList.toggle('open');
+  navOverlay.classList.toggle('open');
+});
+
+navOverlay.addEventListener('click', closeNav);
+
+navMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', closeNav);
+});
+
 // Landing screen dismissal
 const landingScreen = document.getElementById('landingScreen');
 const landingPrompt = document.getElementById('landingPrompt');
@@ -469,7 +597,7 @@ landingScreen.addEventListener('click', enterSite);
 
 // Curved carousel of photos and videos
 const media = [
-  { type: 'image', src: 'media/photo1.jpg' },
+  { type: 'image', src: 'media/image1.jpg' },
   { type: 'video', src: 'media/video1.mp4' },
   { type: 'video', src: 'media/video2.mp4' },
   { type: 'video', src: 'media/video3.mp4' },
