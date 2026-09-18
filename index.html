@@ -111,6 +111,68 @@
     margin: 0 auto;
   }
 
+  .landing-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #123a5e 0%, #0a2440 55%, #04101d 100%);
+    transition: opacity 0.8s ease;
+  }
+
+  .landing-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .landing-name {
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 5.5em;
+    text-shadow: 0 0 25px rgba(255, 200, 120, 0.7);
+    animation: glowPulse 3s ease-in-out infinite;
+    margin: 0;
+  }
+
+  .landing-subtext {
+    color: #cfe8ff;
+    font-family: 'Kalam', cursive;
+    font-size: 1.3em;
+    margin-top: 14px;
+    opacity: 0.9;
+  }
+
+  .landing-prompt {
+    color: #ffd9a0;
+    font-family: 'Kalam', cursive;
+    font-size: 1.1em;
+    margin-top: 60px;
+    opacity: 0;
+    letter-spacing: 1px;
+    animation: fadeInPrompt 1.2s ease forwards;
+    animation-delay: 1.2s;
+    cursor: pointer;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { text-shadow: 0 0 25px rgba(255, 200, 120, 0.7); }
+    50% { text-shadow: 0 0 45px rgba(255, 200, 120, 1); }
+  }
+
+  @keyframes fadeInPrompt {
+    from { opacity: 0; }
+    to { opacity: 0.85; }
+  }
+
+  body.locked {
+    overflow: hidden;
+    height: 100vh;
+  }
+
   .carousel-section {
     width: 100%;
     box-sizing: border-box;
@@ -340,7 +402,13 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
+
+<div class="landing-screen" id="landingScreen">
+  <div class="landing-name">Imisi</div>
+  <div class="landing-subtext">a little something made for you</div>
+  <div class="landing-prompt" id="landingPrompt">tap to open</div>
+</div>
 
 <div class="timer-section">
   <div class="timer-heading">Every Second With You</div>
@@ -383,15 +451,31 @@
 </div>
 
 <div class="closing-section">
-  <div class="closing-message">Every line, every word, every second, all for you.<br>I love you, Imisi.</div>
+  <div class="closing-message">You are my favorite person, my safest place, and my forever choice.<br>I love you, Imisi.</div>
 </div>
 
 <script>
+// Landing screen dismissal
+const landingScreen = document.getElementById('landingScreen');
+const landingPrompt = document.getElementById('landingPrompt');
+
+function enterSite() {
+  landingScreen.classList.add('hidden');
+  document.body.classList.remove('locked');
+  setTimeout(() => { landingScreen.style.display = 'none'; }, 800);
+}
+
+landingScreen.addEventListener('click', enterSite);
+
 // Curved carousel of photos and videos
 const media = [
-  { type: 'image', src: 'media\\image1.jpg' },
-  { type: 'video', src: 'media\\video1.mp4' },
-  { type: 'video', src: 'media\\video2.mp4' },
+  { type: 'image', src: 'media/photo1.jpg' },
+  { type: 'video', src: 'media/video1.mp4' },
+  { type: 'video', src: 'media/video2.mp4' },
+  { type: 'video', src: 'media/video3.mp4' },
+  { type: 'image', src: 'media/photo2.jpg' },
+  { type: 'image', src: 'media/photo3.jpg' },
+  { type: 'image', src: 'media/photo4.png' }
 ];
 
 const stage = document.getElementById('carouselStage');
