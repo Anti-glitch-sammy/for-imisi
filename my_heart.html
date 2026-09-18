@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Heart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(
+      180deg,
+      #0a2440 0%,
+      #0f2e4d 25%,
+      #081c30 50%,
+      #051220 75%,
+      #04101d 100%
+    );
+    background-attachment: fixed;
+  }
+
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .header {
+    position: absolute;
+    top: 5%;
+    width: 100%;
+    text-align: center;
+    color: #ffd9a0;
+    font-size: 2.2em;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(255, 200, 120, 0.5);
+  }
+
+  .formula {
+    position: absolute;
+    top: 11.5%;
+    width: 100%;
+    text-align: center;
+    color: #cfe8ff;
+    font-size: 1.05em;
+    font-family: 'Cambria Math', 'Georgia', serif;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+  }
+
+  .monitor-box {
+    position: absolute;
+    top: 18%;
+    bottom: 8%;
+    left: 3%;
+    right: 3%;
+    border: 2px solid #e0a45c;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(224, 164, 92, 0.35);
+    background:
+      linear-gradient(rgba(224,164,92,0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224,164,92,0.18) 1px, transparent 1px),
+      linear-gradient(rgba(224,164,92,0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224,164,92,0.35) 1px, transparent 1px),
+      #0f2e4d;
+    background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px, 100% 100%;
+    overflow: hidden;
+  }
+
+  #monitorCanvas {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .credit {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    color: #ffd9a0;
+    font-size: 1em;
+    opacity: 0.85;
+    font-style: italic;
+  }
+
+  .closing-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 80px 8% 100px;
+    text-align: center;
+  }
+
+  .closing-message {
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 2.6em;
+    line-height: 1.5;
+    text-shadow: 0 0 15px rgba(255, 200, 120, 0.5);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .carousel-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 70px 4% 100px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .carousel-heading {
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 3em;
+    text-shadow: 0 0 15px rgba(255, 200, 120, 0.5);
+    margin-bottom: 50px;
+  }
+
+  .carousel-stage {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .carousel-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    height: 300px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 3px solid #e0a45c;
+    box-shadow: 0 0 25px rgba(224, 164, 92, 0.35);
+    background: #0f2e4d;
+    transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+    cursor: pointer;
+  }
+
+  .carousel-item img,
+  .carousel-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .carousel-nav {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .carousel-btn {
+    background: #0f2e4d;
+    border: 2px solid #e0a45c;
+    color: #ffd9a0;
+    font-size: 1.4em;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(224, 164, 92, 0.3);
+  }
+
+  .carousel-btn:hover {
+    background: #163a5c;
+  }
+
+  .timer-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 70px 6%;
+    text-align: center;
+  }
+
+  .timer-heading {
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 3em;
+    text-shadow: 0 0 15px rgba(255, 200, 120, 0.5);
+    margin-bottom: 30px;
+  }
+
+  .timer-display {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .timer-unit {
+    background: #0f2e4d;
+    border: 2px solid #e0a45c;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(224, 164, 92, 0.25);
+    padding: 20px 26px;
+    min-width: 100px;
+  }
+
+  .timer-number {
+    color: #cfe8ff;
+    font-size: 2.4em;
+    font-weight: 700;
+    font-family: 'Georgia', serif;
+  }
+
+  .timer-label {
+    color: #ffd9a0;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  .timeline-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 70px 6%;
+  }
+
+  .timeline-heading {
+    text-align: center;
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 3em;
+    text-shadow: 0 0 15px rgba(255, 200, 120, 0.5);
+    margin-bottom: 50px;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+    padding-left: 40px;
+    border-left: 3px solid #e0a45c;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 44px;
+    padding-left: 10px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -50px;
+    top: 4px;
+    width: 16px;
+    height: 16px;
+    background: #ffd9a0;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 217, 160, 0.8);
+  }
+
+  .timeline-date {
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 1.8em;
+    margin-bottom: 6px;
+  }
+
+  .timeline-desc {
+    color: #f3d9c4;
+    font-family: 'Kalam', cursive;
+    font-size: 1.2em;
+    line-height: 1.5;
+  }
+
+  .poems-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 60px 6% 80px;
+  }
+
+  .poems-heading {
+    text-align: center;
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 3em;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(255, 200, 120, 0.5);
+    margin-bottom: 40px;
+  }
+
+  .poems-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  .poem-card {
+    background: #0f2e4d;
+    border: 2px solid #e0a45c;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(224, 164, 92, 0.25);
+    padding: 28px 30px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .poem-title {
+    color: #ffd9a0;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 2.4em;
+    margin: 0 0 14px 0;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  .poem-text {
+    color: #f3d9c4;
+    font-family: 'Kalam', cursive;
+    font-size: 1.4em;
+    line-height: 1.7;
+    white-space: pre-line;
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="timer-section">
+  <div class="timer-heading">Every Second With You</div>
+  <div class="timer-display">
+    <div class="timer-unit"><div class="timer-number" id="tYears">0</div><div class="timer-label">Years</div></div>
+    <div class="timer-unit"><div class="timer-number" id="tDays">0</div><div class="timer-label">Days</div></div>
+    <div class="timer-unit"><div class="timer-number" id="tHours">0</div><div class="timer-label">Hours</div></div>
+    <div class="timer-unit"><div class="timer-number" id="tMinutes">0</div><div class="timer-label">Minutes</div></div>
+    <div class="timer-unit"><div class="timer-number" id="tSeconds">0</div><div class="timer-label">Seconds</div></div>
+  </div>
+</div>
+
+<div class="timeline-section">
+  <div class="timeline-heading">Our Story</div>
+  <div class="timeline" id="timelineList"></div>
+</div>
+
+<div class="carousel-section">
+  <div class="carousel-heading">Us, In Moments</div>
+  <div class="carousel-stage" id="carouselStage"></div>
+  <div class="carousel-nav">
+    <button class="carousel-btn" id="carouselPrev">&#8592;</button>
+    <button class="carousel-btn" id="carouselNext">&#8594;</button>
+  </div>
+</div>
+
+<div class="poems-section">
+  <div class="poems-heading">Letters to My Love</div>
+  <div class="poems-grid" id="poemsGrid"></div>
+</div>
+
+<div class="hero">
+  <div class="header">The Formula of Our Love</div>
+  <div class="formula">f(x) = |x|^(2/3) + sqrt(3.2 - x^2) * sin(18 * pi * x)</div>
+
+  <div class="monitor-box">
+    <canvas id="monitorCanvas"></canvas>
+  </div>
+
+</div>
+
+<div class="closing-section">
+  <div class="closing-message">Every line, every word, every second, all for you.<br>I love you, Imisi.</div>
+</div>
+
+<script>
+// Curved carousel of photos and videos
+const media = [
+  { type: 'image', src: 'media\\image1.jpg' },
+  { type: 'video', src: 'media\\video1.mp4' },
+  { type: 'video', src: 'media\\video2.mp4' },
+];
+
+const stage = document.getElementById('carouselStage');
+let activeIndex = 0;
+
+const itemEls = media.map((m, i) => {
+  const el = document.createElement('div');
+  el.className = 'carousel-item';
+  if (m.type === 'image') {
+    const img = document.createElement('img');
+    img.src = m.src;
+    el.appendChild(img);
+  } else {
+    const vid = document.createElement('video');
+    vid.src = m.src;
+    vid.muted = true;
+    vid.loop = true;
+    vid.playsInline = true;
+    el.appendChild(vid);
+  }
+  el.addEventListener('click', () => {
+    activeIndex = i;
+    renderCarousel();
+  });
+  stage.appendChild(el);
+  return el;
+});
+
+function renderCarousel() {
+  const n = media.length;
+  const arcSpread = 70; // degrees of arc used across the visible items
+  const radius = 340;
+
+  itemEls.forEach((el, i) => {
+    let offset = i - activeIndex;
+    // wrap offset to shortest path around the set
+    if (offset > n / 2) offset -= n;
+    if (offset < -n / 2) offset += n;
+
+    const maxVisible = 3; // how many items away from center still show
+    const isVisible = Math.abs(offset) <= maxVisible;
+
+    if (!isVisible) {
+      el.style.opacity = '0';
+      el.style.pointerEvents = 'none';
+      el.style.zIndex = 0;
+      return;
+    }
+
+    const angleDeg = offset * (arcSpread / maxVisible);
+    const angleRad = angleDeg * Math.PI / 180;
+
+    const x = Math.sin(angleRad) * radius;
+    const y = -Math.cos(angleRad) * radius + radius * 0.62;
+
+    const scale = 1 - Math.abs(offset) * 0.14;
+    const rotate = angleDeg * 0.5;
+    const opacity = 1 - Math.abs(offset) * 0.18;
+    const zIndex = 100 - Math.abs(offset);
+
+    el.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotate}deg) scale(${scale})`;
+    el.style.opacity = String(Math.max(opacity, 0.15));
+    el.style.zIndex = String(zIndex);
+    el.style.pointerEvents = 'auto';
+    el.style.filter = offset === 0 ? 'none' : 'brightness(0.75)';
+
+    const video = el.querySelector('video');
+    if (video) {
+      if (offset === 0) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    }
+  });
+}
+
+document.getElementById('carouselPrev').addEventListener('click', () => {
+  activeIndex = (activeIndex - 1 + media.length) % media.length;
+  renderCarousel();
+});
+
+document.getElementById('carouselNext').addEventListener('click', () => {
+  activeIndex = (activeIndex + 1) % media.length;
+  renderCarousel();
+});
+
+renderCarousel();
+
+// Countdown timer since the relationship began
+const START_DATE = new Date('2026-07-19T23:00:00');
+
+function updateTimer() {
+  const now = new Date();
+  let diffMs = now - START_DATE;
+  if (diffMs < 0) diffMs = 0;
+
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const years = Math.floor(totalSeconds / (365.25 * 24 * 3600));
+  const remAfterYears = totalSeconds - Math.floor(years * 365.25 * 24 * 3600);
+  const days = Math.floor(remAfterYears / (24 * 3600));
+  const hours = Math.floor((remAfterYears % (24 * 3600)) / 3600);
+  const minutes = Math.floor((remAfterYears % 3600) / 60);
+  const seconds = remAfterYears % 60;
+
+  document.getElementById('tYears').textContent = years;
+  document.getElementById('tDays').textContent = days;
+  document.getElementById('tHours').textContent = hours;
+  document.getElementById('tMinutes').textContent = minutes;
+  document.getElementById('tSeconds').textContent = seconds;
+}
+
+updateTimer();
+setInterval(updateTimer, 1000);
+
+// Timeline of relationship milestones
+const milestones = [
+  { date: 'August 5, 2024', desc: 'The best day of my life.' },
+  { date: 'July 19, 2026', desc: 'The happiest day of my life.' },
+  { date: 'August 5, 2026', desc: 'The proudest day of my life.' },
+  { date: 'August 18, 2026', desc: 'The sweetest moment of my life.' }
+];
+
+const timelineList = document.getElementById('timelineList');
+milestones.forEach(m => {
+  const item = document.createElement('div');
+  item.className = 'timeline-item';
+
+  const dateEl = document.createElement('div');
+  dateEl.className = 'timeline-date';
+  dateEl.textContent = m.date;
+
+  const descEl = document.createElement('div');
+  descEl.className = 'timeline-desc';
+  descEl.textContent = m.desc;
+
+  item.appendChild(dateEl);
+  item.appendChild(descEl);
+  timelineList.appendChild(item);
+});
+
+const poems = [{"title": "Such Hate", "text": "Want to know something?\nI hate that you're the first thing on my mind every morning,\nHate that talking with you is the highlight of my day,\nHate how missing you is my favourite pastime,\nHate that your voice forces a smile,\nHate that even on your worst days, you're a ten plus two,\nHate how I feel when I see you talking to other guys,\nHate how close we are but not,\nHate that even though our meeting was kinda weird, but I wouldn't change it for the world,\nAnd worst of all,\nI hate that you're everything—just not for me."}, {"title": "In Death, I Love You", "text": "Death.\nThe greatest and everlasting fear of mankind.\nThe one and only opposition to life.\nThe driving force of both success, and sorrow.\nBut is that all there is?\nMust all we ever know, come to an inevitable end?\nMust our once vibrant and blood spilling hearts one day just refuse to move?\nHuhhhhh\nWell,\nThere is ONE positive.\nDeath helps us see what's true.\nIt grants us true gratitude.\nIt lets us appreciate what we might not have otherwise.\nHow many times have you looked in the mirror and experienced true bliss as you compare yourself to a you of 10, 9, maybe 13 years old.\nYes.\nWe all need to know Death.\nFor only in true death, life exists.\nFor only by comparison, we see how incompatible you are.\nFor only in admiration, we experience true ecstasy as we know we will experience Death.\nFor only by experiencing you, do I know I can die with a smile on my face.\nSure my feelings for you might never truly be expressed,\nbut know this,\nAs long as pain teaches, and Death persists,\nI love you."}, {"title": "Better an Obsession", "text": "And it might seem like an obsession\nBut better an obsession than not expressing the love I have for you\nFor it is better to love in the open, than weep alone."}, {"title": "True Beauty", "text": "What is beauty?\nAs humans, we all seek true beauty, true acceptance, true admirability\nIn my 17+yrs of life\nNever have I once dreamt that I would have the privilege of witnessing.....you\nBeauty? No\nThat isn't enough to describe you\nDazzling? Nah, even stars can attain that\nNo\nWhat you have is something only you can\nThe want to hold you tightly and never let go always hovers around me\nBut alas,\nTrue beauty can only ever be observed\nNever captivated\nNever held down.\nNever just.....mine.\nBut know this,\nEven as your beauty will be witnessed and adored by the masses\nAnd your smile lights the dark hearts of the depressed\nI love you"}, {"title": "Change", "text": "You've changed.\nHow?\nSure, you might say stuff like \"well, yeah, I'm taller\", or \"I'm way smarter\".\nAnd you ARE right (the first part, at least),\nBut that's not the change I am talking about.\nThe change I speak of is one not seen by anyone but you,\nIt's one that makes you look in my mirror and smile, knowing your past self would be proud.\nIt's the change that makes you remember past events and cringe.\nIt's the change that makes loving you so worth it.\nDon't get me wrong,\nYes, you're smarter.\nyou're prettier.\nyou make wiser decisions.\nBut the change I speak of is one that makes you mine.\nEveryone perceives change\nAnd everyone who knows, knows you've changed,\nBut I see a change that makes you even more perfect.\nAnd would you look at that,\nToday is your graduation.\nAnd there you are in your blue dress,\nLooking nothing but eloquent.\nAnd I can probably spend the rest of my life describing how amazing you look, but even that won't be enough.\nSo I will say just one thing.\nI might not be a jolly fellow, nor one who deserves to be loved,\nBut the few minutes I spent in your arms, will be engraved on my heart forever.\nAnd all I want is to be someone deserving of you.\nSomeone you can be proud of.\nSomeone who can make you smile.\nYou are my everything and more.\nI love you.\nCongrats on your graduation and being valedictorian"}];
+
+const poemsGrid = document.getElementById('poemsGrid');
+poems.forEach(poem => {
+  const card = document.createElement('div');
+  card.className = 'poem-card';
+
+  const title = document.createElement('h3');
+  title.className = 'poem-title';
+  title.textContent = poem.title;
+
+  const text = document.createElement('p');
+  text.className = 'poem-text';
+  text.textContent = poem.text;
+
+  card.appendChild(title);
+  card.appendChild(text);
+  poemsGrid.appendChild(card);
+});
+</script>
+
+<script>
+const canvas = document.getElementById('monitorCanvas');
+const ctx = canvas.getContext('2d');
+const box = document.querySelector('.monitor-box');
+
+function f(x) {
+  const inner = 3.2 - x * x;
+  if (inner < 0) return null;
+  return Math.pow(Math.abs(x), 2 / 3) + Math.sqrt(inner) * Math.sin(18 * Math.PI * x);
+}
+
+const STEP_PX = 4;
+
+function densify(rawPoints) {
+  const out = [rawPoints[0]];
+  let carry = 0;
+  for (let i = 1; i < rawPoints.length; i++) {
+    let [x0, y0] = out[out.length - 1];
+    const [x1, y1] = rawPoints[i];
+    let segLen = Math.hypot(x1 - x0, y1 - y0);
+    while (carry + segLen >= STEP_PX) {
+      const need = STEP_PX - carry;
+      const t = need / segLen;
+      const nx = x0 + (x1 - x0) * t;
+      const ny = y0 + (y1 - y0) * t;
+      out.push([nx, ny]);
+      x0 = nx; y0 = ny;
+      segLen = Math.hypot(x1 - x0, y1 - y0);
+      carry = 0;
+    }
+    carry += segLen;
+  }
+  return out;
+}
+
+let allPoints = [];
+let pauseIndices = new Set();
+let idx = 0;
+let animId = null;
+
+function buildPoints() {
+  const W = canvas.width;
+  const H = canvas.height;
+  const centerX = W / 2;
+  const centerY = H * 0.55;
+  const scale = Math.min(W, H) / 5.2;
+
+  const limit = Math.sqrt(3.2);
+  const N = 2000;
+  const wavePoints = [];
+  for (let i = 0; i <= N; i++) {
+    const x = -limit + (2 * limit) * i / N;
+    const y = f(x);
+    if (y !== null) {
+      wavePoints.push([centerX + x * scale, centerY - y * scale]);
+    }
+  }
+
+  const combined = densify(wavePoints);
+  return { points: combined, pauseIndices: new Set() };
+}
+
+function rebuild() {
+  const result = buildPoints();
+  allPoints = result.points;
+  pauseIndices = result.pauseIndices;
+  idx = 0;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+const POINTS_PER_FRAME = 6;
+
+function animate() {
+  if (idx < allPoints.length - 1) {
+    if (pauseIndices.has(idx)) {
+      idx++;
+      setTimeout(() => { animId = requestAnimationFrame(animate); }, 500);
+      return;
+    }
+    let steps = 0;
+    while (idx < allPoints.length - 1 && steps < POINTS_PER_FRAME && !pauseIndices.has(idx)) {
+      ctx.beginPath();
+      ctx.moveTo(allPoints[idx][0], allPoints[idx][1]);
+      ctx.lineTo(allPoints[idx + 1][0], allPoints[idx + 1][1]);
+      ctx.stroke();
+      idx++;
+      steps++;
+    }
+    animId = requestAnimationFrame(animate);
+  } else {
+    setTimeout(() => {
+      rebuild();
+      animate();
+    }, 1500);
+  }
+}
+
+ctx.strokeStyle = '#4db8ff';
+ctx.lineWidth = 22;
+ctx.lineCap = 'round';
+ctx.lineJoin = 'round';
+ctx.shadowColor = '#4db8ff';
+ctx.shadowBlur = 14;
+
+function applySize(width, height) {
+  const w = Math.max(1, Math.round(width));
+  const h = Math.max(1, Math.round(height));
+  if (w === canvas.width && h === canvas.height) return;
+  canvas.width = w;
+  canvas.height = h;
+  if (animId) cancelAnimationFrame(animId);
+  rebuild();
+  animate();
+}
+
+if (window.ResizeObserver) {
+  const ro = new ResizeObserver(entries => {
+    for (const entry of entries) {
+      const rect = entry.contentRect;
+      applySize(rect.width, rect.height);
+    }
+  });
+  ro.observe(box);
+} else {
+  function fallbackResize() {
+    const rect = box.getBoundingClientRect();
+    applySize(rect.width, rect.height);
+  }
+  window.addEventListener('load', fallbackResize);
+  window.addEventListener('resize', fallbackResize);
+  fallbackResize();
+}
+</script>
+
+</body>
+</html>
